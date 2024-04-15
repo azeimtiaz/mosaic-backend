@@ -8,11 +8,11 @@ app.get("/", (_, res) => res.sendStatus(200));
 
 app.get("/forecast", async (req, res) => {
   try {
-    // const { latitude, longitude } = req.query;
+    const { latitude, longitude, date } = req.query;
 
-    const latitude = 6.0329;
-    const longitude = 80.2168;
-    const date = "2024-04-15T00:30:00+05:30";
+    // const latitude = 6.0329;
+    // const longitude = 80.2168;
+    // const date = "2024-04-15T00:30:00+05:30";
 
     if (!latitude || !longitude || !date) throw Error("Data not provided");
 
