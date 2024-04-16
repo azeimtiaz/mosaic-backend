@@ -44,3 +44,25 @@ export const getTemperature = async ({ latitude, longitude, date }) => {
     throw Error(error);
   }
 };
+
+export const getSkintone = async (fileURL) => {
+  try {
+    const options = {
+      method: "POST",
+      url: `${process.env.ML_MODEL}/getSkinTone`,
+      data: {
+        image_url: fileURL,
+      },
+      headers: {
+        Accept: "/",
+      },
+    };
+    const {
+      data: { image, skin_tone, error },
+    } = await axios.request(options);
+    if (error) throw Error(error);
+    return { image, skinTone: skin_tone };
+  } catch (error) {
+    throw Error(error);
+  }
+};

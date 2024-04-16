@@ -1,10 +1,10 @@
 import express from "express";
-import { getTemperature } from "./service.js";
+import { getTemperature, getSkintone } from "./service.js";
 import { upload } from "./s3-upload.js";
 import { BUCKET_URL } from "./config/s3.config.js";
 
 const app = express();
-const PORT = 3000;
+const PORT = 8081;
 
 app.get("/", (_, res) => res.sendStatus(200));
 
@@ -33,6 +33,20 @@ app.post("/upload", upload.single("file"), async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
+  }
+});
+
+app.post("/upload-detect", upload.single("file"), async (req, res) => {
+  try {
+    const fileKey = req.file.key;
+    const fileURL = BUCKET_URL + fileKey;
+    const { image, skinTone } = await getSkintone(fileURL);
+    res.status(200).send({ image, skinTone });
+  } catch (error) {
+    console.error(error.message);
+    res
+      .status(500)
+      .send({ error: "Internal Server Error", message: error.message });
   }
 });
 
