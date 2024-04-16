@@ -1,6 +1,7 @@
 import axios from "axios";
 import { data } from "./mock.js";
 import { toCelsius } from "celsius";
+import "dotenv/config";
 
 const isMockDataEnabled = true;
 
