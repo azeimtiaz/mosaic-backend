@@ -45,7 +45,6 @@ export const getTemperature = async ({ latitude, longitude, date }) => {
     throw Error(error);
   }
 };
-
 export const getSkintone = async (fileURL) => {
   try {
     const options = {

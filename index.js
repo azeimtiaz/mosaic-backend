@@ -1,12 +1,12 @@
 import express from "express";
-import { getTemperature, getSkintone } from "./service.js";
+import { getSkintone, getTemperature } from "./service.js";
 import { upload } from "./s3-upload.js";
-import { BUCKET_URL } from "./config/s3.config.js";
+import { AWS_BUCKET_NAME, BUCKET_URL } from "./config/s3.config.js";
 
 const app = express();
 const PORT = 8081;
 
-app.get("/", (_, res) => res.sendStatus(200));
+app.get("/", (_, res) => res.send(AWS_BUCKET_NAME));
 
 app.get("/forecast", async (req, res) => {
   try {
