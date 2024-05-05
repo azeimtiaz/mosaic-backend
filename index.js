@@ -51,9 +51,9 @@ app.post("/upload-detect", upload.single("file"), async (req, res) => {
   }
 });
 
-app.get("/similar", async (req, res) => {
+app.post("/similar", async (req, res) => {
   try {
-    const { searchImageUrl, wardrobeImages, threshold } = req.query;
+    const { searchImageUrl, wardrobeImages, threshold } = req.body;
 
     if (!searchImageUrl || !wardrobeImages || !threshold)
       throw Error("Data not provided");
