@@ -73,9 +73,9 @@ app.post("/similar", async (req, res) => {
   }
 });
 
-app.get("/web-search", async (req, res) => {
+app.post("/web-search", async (req, res) => {
   try {
-    const { searchImageUrl } = req.query;
+    const { searchImageUrl } = req.body;
 
     if (!searchImageUrl) throw Error("Data not provided");
 
