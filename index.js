@@ -1,5 +1,10 @@
 import express from "express";
-import { getSkintone, getTemperature } from "./service.js";
+import {
+  getSkintone,
+  getTemperature,
+  getSimilarImages,
+  getWebSearch,
+} from "./service.js";
 import { upload } from "./s3-upload.js";
 import { AWS_BUCKET_NAME, BUCKET_URL } from "./config/s3.config.js";
 
@@ -11,10 +16,6 @@ app.get("/", (_, res) => res.send(AWS_BUCKET_NAME));
 app.get("/forecast", async (req, res) => {
   try {
     const { latitude, longitude, date } = req.query;
-
-    // const latitude = 6.0329;
-    // const longitude = 80.2168;
-    // const date = "2024-04-15T00:30:00+05:30";
 
     if (!latitude || !longitude || !date) throw Error("Data not provided");
 
@@ -47,6 +48,41 @@ app.post("/upload-detect", upload.single("file"), async (req, res) => {
     res
       .status(500)
       .send({ error: "Internal Server Error", message: error.message });
+  }
+});
+
+app.get("/similar", async (req, res) => {
+  try {
+    const { searchImageUrl, wardrobeImages, threshold } = req.query;
+
+    if (!searchImageUrl || !wardrobeImages || !threshold)
+      throw Error("Data not provided");
+
+    const similarImages = await getSimilarImages({
+      searchImageUrl,
+      wardrobeImages,
+      threshold,
+    });
+    res.send(similarImages);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+app.get("/web-search", async (req, res) => {
+  try {
+    const { searchImageUrl } = req.query;
+
+    if (!searchImageUrl) throw Error("Data not provided");
+
+    const productList = await getWebSearch({
+      searchImageUrl,
+    });
+    res.send(productList);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
   }
 });
 

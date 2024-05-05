@@ -39,7 +39,6 @@ export const getTemperature = async ({ latitude, longitude, date }) => {
       (value) => value.datetimeStr.slice(0, 10) === date.slice(0, 10)
     );
 
-    if (!result) return { temperature: getRandomNumber(25, 38) };
     return { temperature: toCelsius(result.temp) };
   } catch (error) {
     throw Error(error);
@@ -62,6 +61,56 @@ export const getSkintone = async (fileURL) => {
     } = await axios.request(options);
     if (error) throw Error(error);
     return { image, skinTone: skin_tone };
+  } catch (error) {
+    throw Error(error);
+  }
+};
+
+export const getSimilarImages = async ({
+  searchImageUrl,
+  wardrobeImages,
+  threshold,
+}) => {
+  try {
+    const options = {
+      method: "POST",
+      url: `${process.env.ML_MODEL}/similar`,
+      data: {
+        search_image_url: searchImageUrl,
+        wardrobe_images: wardrobeImages,
+        threshold,
+      },
+      headers: {
+        Accept: "/",
+      },
+    };
+    const {
+      data: { similar_images, error },
+    } = await axios.request(options);
+    if (error) throw Error(error);
+    return { similar_images };
+  } catch (error) {
+    throw Error(error);
+  }
+};
+
+export const getWebSearch = async ({ searchImageUrl }) => {
+  try {
+    const options = {
+      method: "POST",
+      url: `${process.env.ML_MODEL}/web-search`,
+      data: {
+        search_image_url: searchImageUrl,
+      },
+      headers: {
+        Accept: "/",
+      },
+    };
+    const {
+      data: { product_list, error },
+    } = await axios.request(options);
+    if (error) throw Error(error);
+    return { product_list };
   } catch (error) {
     throw Error(error);
   }
