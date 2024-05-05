@@ -9,6 +9,9 @@ import { upload } from "./s3-upload.js";
 import { AWS_BUCKET_NAME, BUCKET_URL } from "./config/s3.config.js";
 
 const app = express();
+
+app.use(express.json());
+
 const PORT = 8081;
 
 app.get("/", (_, res) => res.send(AWS_BUCKET_NAME));
